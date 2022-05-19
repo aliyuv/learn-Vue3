@@ -12,11 +12,16 @@
   <h1>X: {{ x }}</h1>
   <h1>Y: {{ y }}</h1>
 
+  <h2>----------模块化难度上升------------</h2>
+  <h1 v-if="loading">Loading!---</h1>
+  <img v-if="loaded" :src="result.message" alt="">
+
 </template>
 
 <script lang="ts">
 import {computed, defineComponent, reactive, toRefs, onMounted, onUpdated, onRenderTriggered, watch, ref} from "vue";
 import useMousePosition from "@/hooks/useMousePosition";
+import useURLLoader from "@/hooks/useURLLoader";
 
 interface DataProps {
   count: number;
@@ -27,8 +32,8 @@ interface DataProps {
 export default defineComponent({
   name: "App",
   setup: function () {
-    const RefUseMousePosition = toRefs(useMousePosition());
-    console.log(RefUseMousePosition);
+    const {x, y} = useMousePosition();
+    const {result, loading, loaded} = useURLLoader("https://dog.ceo/api/breeds/image/random");
     onMounted(() => {
       console.log("mounted");
     });
@@ -61,7 +66,11 @@ export default defineComponent({
       ...refData,
       greetings,
       updateGreeting,
-      ...RefUseMousePosition
+      x,
+      y,
+      result,
+      loading,
+      loaded
     };
   }
 });
