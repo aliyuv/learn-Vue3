@@ -7,10 +7,16 @@
   <h1>{{ greetings }}</h1>
   <button @click="increase">+1</button>
   <button @click="updateGreeting">update title</button>
+
+  <h2>----------改写reactive版本----------</h2>
+  <h1>X: {{ x }}</h1>
+  <h1>Y: {{ y }}</h1>
+
 </template>
 
 <script lang="ts">
 import {computed, defineComponent, reactive, toRefs, onMounted, onUpdated, onRenderTriggered, watch, ref} from "vue";
+import useMousePosition from "@/hooks/useMousePosition";
 
 interface DataProps {
   count: number;
@@ -21,6 +27,8 @@ interface DataProps {
 export default defineComponent({
   name: "App",
   setup: function () {
+    const RefUseMousePosition = toRefs(useMousePosition());
+    console.log(RefUseMousePosition);
     onMounted(() => {
       console.log("mounted");
     });
@@ -52,7 +60,8 @@ export default defineComponent({
     return {
       ...refData,
       greetings,
-      updateGreeting
+      updateGreeting,
+      ...RefUseMousePosition
     };
   }
 });
