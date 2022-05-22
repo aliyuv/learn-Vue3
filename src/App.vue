@@ -14,7 +14,7 @@
 
   <h2>----------模块化难度上升------------</h2>
   <h1 v-if="loading">Loading!---</h1>
-  <img v-if="loaded" :src="result.message" alt="">
+  <img v-if="loaded" :src="result[0].url" alt="">
 
 </template>
 
@@ -29,11 +29,30 @@ interface DataProps {
   increase: () => void;
 }
 
+interface DogResult {
+  message: string;
+  status: string;
+}
+
+interface CatResult {
+  id: string;
+  url: string;
+  width: number;
+  height: number;
+}
+
 export default defineComponent({
   name: "App",
   setup: function () {
     const {x, y} = useMousePosition();
-    const {result, loading, loaded} = useURLLoader("https://dog.ceo/api/breeds/image/random");
+    // const {result, loading, loaded} = useURLLoader<DogResult>("https://dog.ceo/api/breeds/image/random");
+    const {result, loading, loaded} = useURLLoader<CatResult[]>("https://api.thecatapi.com/v1/images/search");
+
+    watch(result, () => {
+      if (result.value) {
+        console.log(result.value[0].url);
+      }
+    });
     onMounted(() => {
       console.log("mounted");
     });
