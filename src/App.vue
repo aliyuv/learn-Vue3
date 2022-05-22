@@ -19,6 +19,16 @@
   <h2>--------------Teleport---------------</h2>
   <button @click="openModal">Open Modal</button>
   <Modal :is-open="modalIsOpen" @close-modal="onModalClose">My Modal !!!!</Modal>
+
+  <h1>---------------suspense-------------------</h1>
+  <Suspense>
+    <template #default>
+      <AsyncShow></AsyncShow>
+    </template>
+    <template #fallback>
+      <h1>Loading!!!!!!!!!!</h1>
+    </template>
+  </Suspense>
 </template>
 
 <script lang="ts">
@@ -26,6 +36,7 @@ import {computed, defineComponent, reactive, toRefs, onMounted, onUpdated, onRen
 import useMousePosition from "@/hooks/useMousePosition";
 import useURLLoader from "@/hooks/useURLLoader";
 import Modal from "@/components/Modal.vue";
+import AsyncShow from "@/components/AsyncShow.vue";
 
 interface DataProps {
   count: number;
@@ -47,7 +58,7 @@ interface CatResult {
 
 export default defineComponent({
   name: "App",
-  components: {Modal},
+  components: {Modal, AsyncShow},
   setup: function () {
     const {x, y} = useMousePosition();
     // const {result, loading, loaded} = useURLLoader<DogResult>("https://dog.ceo/api/breeds/image/random");
