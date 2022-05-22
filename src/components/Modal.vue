@@ -4,17 +4,19 @@
       <h2>
         <slot>this is modal</slot>
       </h2>
+      <h2>{{ lang }}</h2>
+      <h2>{{ currentUser && currentUser.name }}</h2>
       <button @click="buttonClick">Close</button>
     </div>
   </teleport>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, inject} from "vue";
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
-  name:'Modal.vue',
+  name: "Modal.vue",
   props: {
     isOpen: Boolean
   },
@@ -22,11 +24,15 @@ export default defineComponent({
     "close-modal": null
   },
   setup(props, context) {
+    const lang = inject("lang");
+    const currentUser = inject<{ name: string }>("currentUser");
     const buttonClick = () => {
       context.emit("close-modal");
     };
     return {
-      buttonClick
+      buttonClick,
+      lang,
+      currentUser
     };
   }
 });
