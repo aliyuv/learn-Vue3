@@ -16,12 +16,16 @@
   <h1 v-if="loading">Loading!---</h1>
   <img v-if="loaded" :src="result[0].url" alt="">
 
+  <h2>--------------Teleport---------------</h2>
+  <button @click="openModal">Open Modal</button>
+  <Modal :is-open="modalIsOpen" @close-modal="onModalClose">My Modal !!!!</Modal>
 </template>
 
 <script lang="ts">
 import {computed, defineComponent, reactive, toRefs, onMounted, onUpdated, onRenderTriggered, watch, ref} from "vue";
 import useMousePosition from "@/hooks/useMousePosition";
 import useURLLoader from "@/hooks/useURLLoader";
+import Modal from "@/components/Modal.vue";
 
 interface DataProps {
   count: number;
@@ -43,6 +47,7 @@ interface CatResult {
 
 export default defineComponent({
   name: "App",
+  components: {Modal},
   setup: function () {
     const {x, y} = useMousePosition();
     // const {result, loading, loaded} = useURLLoader<DogResult>("https://dog.ceo/api/breeds/image/random");
@@ -81,6 +86,13 @@ export default defineComponent({
       document.title = "updated" + greetings.value + data.count;
     });
     const refData = toRefs(data);
+    const modalIsOpen = ref(false);
+    const openModal = () => {
+      modalIsOpen.value = true;
+    };
+    const onModalClose = () => {
+      modalIsOpen.value = false;
+    };
     return {
       ...refData,
       greetings,
@@ -89,7 +101,10 @@ export default defineComponent({
       y,
       result,
       loading,
-      loaded
+      loaded,
+      modalIsOpen,
+      openModal,
+      onModalClose
     };
   }
 });
